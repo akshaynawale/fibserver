@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  worker:
+    build: 
+      dockerfile: ./worker/Dockerfile
+      context: .
+  
+  webserver:
+    build: 
+      dockerfile: ./webServer/Dockerfile
+      context: .
+    ports: 
+      - '8080:8080'
+  redis:
+    image: redis:latest
+

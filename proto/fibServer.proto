@@ -1,0 +1,19 @@
+syntax = "proto3";
+package FibServerPB;
+
+option go_package = "fibServer/proto";
+
+service FibWorker {
+    // given a number returns it fibonachi number
+    rpc GetFibNumber(FibRequest) returns (FibReply) {}
+}
+
+message FibRequest {
+    int32 num = 1;
+}
+
+message FibReply {
+    int32 num = 1;
+}
+
+
