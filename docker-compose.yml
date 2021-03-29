@@ -11,7 +11,7 @@ services:
       dockerfile: ./webServer/Dockerfile
       context: .
     ports: 
-      - '8080:8080'
+      - '8181:8080'
   redis:
     image: redis:latest
 

@@ -33,7 +33,8 @@ func NewWebServer() WebServer {
 	}
 	// create redis client
 	// Initialize the redis connection to a redis instance running on your local machine
-	rc, err := redis.DialURL("redis://fibserver_redis_1") // instead of localhost use the container name instead
+	rc, err := redis.Dial("tcp", "redis:6379") // instead of localhost use the container name instead
+	//rc, err := redis.Dial("tcp", "localhost:6379") 
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +83,14 @@ func (fh *FibHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		}
 		return
 	}
-
+	// if the string is emptythen retrn with the form 
+	if indexStr == "" {
+		if err = fh.tmpl.Execute(w, fh.Message); err != nil {
+			fmt.Printf("failed to execute the template: %v\n", err)
+			os.Exit(1)
+		}
+		return			
+	}
 	// convert the string to the int
 	input, err := strconv.Atoi(indexStr)
 	var reply *pb.FibReply
@@ -115,7 +123,7 @@ func (fh *FibHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	flag.StringVar(&serverAddr, "serverAddr", "fibserver_worker_1:5544", "Fib Worker server address to connect")
+	flag.StringVar(&serverAddr, "serverAddr", "worker:5544", "Fib Worker server address to connect")
 	flag.Parse()
 	NewWebServer()
 
